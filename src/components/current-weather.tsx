@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card"
+import { ArrowDown, ArrowUp, Droplets, Wind } from "lucide-react";
 
 interface CurrentWeatherProps{
     data:WeatherData,
@@ -17,7 +18,9 @@ const CurrentWeather = ({data, locationName}: CurrentWeatherProps)=> {
         wind:{speed},
     } = data;
 
-    const formatTemp = (temp:number) => `${Math.round(temp)}°` 
+    const formatTemp = (temp:number) => `${Math.round(celtoFar(temp))}°` 
+    const celtoFar = (cel:number)=> (cel*9/5)+32;
+    const convertspeed = (vel:number)=>(Math.round(vel*2.237));
 
     console.log(locationName?.name);
 
@@ -45,10 +48,44 @@ const CurrentWeather = ({data, locationName}: CurrentWeatherProps)=> {
                             </div>
                             <div className="space-y-1">
                                 <p className="text-sm font-medium text-muted-foreground">
-                                    Feels Like{formatTemp(feels_like)}
+                                    Feels Like {formatTemp(feels_like)}
                                 </p>
+                                <div className="flex gap-2 text-sm font-medium">
+                                    <span className="flex items-center gap-1 text-blue-500">
+                                        <ArrowDown className="h-3 w-3"/>
+                                        {formatTemp(temp_min)}
+                                    </span>
+                                    <span className="flex items-center gap-1 text-red-500">
+                                        <ArrowUp className="h-3 w-3"/>
+                                        {formatTemp(temp_max)}
+                                    </span>
+                                </div>
                             </div>
                         </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="flex items-center gap-2">
+                                <Droplets className="h-4 w-4 text-blue-500"/>
+                                <div className="space-y-0.5">
+                                    <p className="text-sm font-medium">Humidity</p>
+                                    <p className="text-sm text-muted-foreground">{humidity}%</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <Wind className="h-4 w-4 text-blue-500"/>
+                            <div className="space-y-0.5">
+                                <p className="text-sm font-medium">Wind Speed</p>
+                                <p className="text-sm text-muted-foreground">{convertspeed(speed)} mph</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div className="relative flex aspect-square w-full max-w-[200px] items-center justify-center">
+                        <p className="text-sm font-medium capitalize">{currentWeather.description}</p>
                     </div>
                 </div>
             </CardContent>
